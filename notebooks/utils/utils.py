@@ -3,7 +3,7 @@ import numpy as np
 
 def ordinal_to_weight(df: pd.DataFrame, col_name: str, target: str='SalePrice', log_transform=False, scaler_type: str='minmax'):
     """
-    順序尺度のカテゴリを対象変数の平均値に基づいて数値化する関数
+    順序尺度のカテゴリをターゲットエンコーディングする関数
 
     Args:
         df (DataFrame): 対象データフレーム
@@ -74,3 +74,41 @@ def freq_dist(data, class_width=None):
                         index=pd.Index([f'{bins[i]}以上{bins[i+1]}未満'
                                         for i in range(hist.size)],
                                        name='階級'))
+    
+def plot_feature_importance(model, feature_names, title="Importance of Features"):
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    # 係数を取得
+    coef = model.coef_
+    
+    # 係数の絶対値でソート
+    importance = pd.DataFrame({
+        'feature': feature_names,
+        'importance': np.abs(coef),
+        'coefficient': coef
+    }).sort_values('importance', ascending=False)
+    
+    # 図のサイズ設定
+    plt.figure(figsize=(12, 8))
+    
+    # プロット（係数の符号で色分け）
+    colors = ['red' if c < 0 else 'blue' for c in importance['coefficient']]
+    sns.barplot(x='importance', y='feature', data=importance, palette=colors)
+    
+    # 軸ラベルとタイトル
+    plt.xlabel('Abs. coef')
+    plt.ylabel('Features')
+    plt.title(title)
+    
+    # 凡例を追加
+    from matplotlib.patches import Patch
+    legend_elements = [
+        Patch(facecolor='blue', label='positive influence'),
+        Patch(facecolor='red', label='negative influence')
+    ]
+    plt.legend(handles=legend_elements, loc='lower right')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return importance
