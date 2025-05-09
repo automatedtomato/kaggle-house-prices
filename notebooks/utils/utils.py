@@ -117,7 +117,6 @@ def plot_feature_importance(model, feature_names, title="Importance of Features"
 def plot_learning_curve(estimator, X, y, title="Learning Curve"):
     from sklearn.model_selection import learning_curve
     import matplotlib.pyplot as plt
-    import seaborn as sns
     
     # 学習曲線の計算
     train_sizes, train_scores, val_scores = learning_curve(

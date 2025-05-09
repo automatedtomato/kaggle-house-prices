@@ -6,3 +6,4 @@ scikit-learn==1.6.1
 seaborn==0.13.2
 xgboost==3.0.0
 pingouin==0.5.5
+optuna==4.3.0

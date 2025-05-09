@@ -1,0 +1,2 @@
+,model,params,RMSE,R2
+0,RFR,"{'n_estimators': 147, 'max_depth': 29, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_features': 19}",0.1502,0.8611
