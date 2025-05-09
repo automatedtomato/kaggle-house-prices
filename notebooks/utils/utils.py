@@ -75,38 +75,56 @@ def freq_dist(data, class_width=None):
                                         for i in range(hist.size)],
                                        name='階級'))
     
-def plot_feature_importance(model, feature_names, title="Importance of Features"):
+def plot_feature_importance(model, feature_names, type='coef', title="Importance of Features"):
     import matplotlib.pyplot as plt
     import seaborn as sns
-    # 係数を取得
-    coef = model.coef_
-    
-    # 係数の絶対値でソート
-    importance = pd.DataFrame({
-        'feature': feature_names,
-        'importance': np.abs(coef),
-        'coefficient': coef
-    }).sort_values('importance', ascending=False)
     
     # 図のサイズ設定
     plt.figure(figsize=(12, 8))
     
-    # プロット（係数の符号で色分け）
-    colors = ['red' if c < 0 else 'blue' for c in importance['coefficient']]
-    sns.barplot(x='importance', y='feature', data=importance, palette=colors)
     
-    # 軸ラベルとタイトル
-    plt.xlabel('Abs. coef')
-    plt.ylabel('Features')
-    plt.title(title)
+    # 係数を取得
+    if type == 'coef':
+        
+        coef = model.coef_
     
-    # 凡例を追加
-    from matplotlib.patches import Patch
-    legend_elements = [
-        Patch(facecolor='blue', label='positive influence'),
-        Patch(facecolor='red', label='negative influence')
-    ]
-    plt.legend(handles=legend_elements, loc='lower right')
+        # 係数の絶対値でソート
+        importance = pd.DataFrame({
+            'feature': feature_names,
+            'importance': np.abs(coef),
+            'coefficient': coef
+        }).sort_values('importance', ascending=False)
+        
+        # プロット（係数の符号で色分け）
+        colors = ['red' if c < 0 else 'blue' for c in importance['coefficient']]
+        sns.barplot(x='importance', y='feature', data=importance, palette=colors)
+        
+        from matplotlib.patches import Patch
+        legend_elements = [
+            Patch(facecolor='blue', label='positive influence'),
+            Patch(facecolor='red', label='negative influence')
+        ]
+        plt.legend(handles=legend_elements, loc='lower right')
+        
+
+        
+    elif type == 'feature_importances':
+        
+        feature_importances = model.feature_importances_
+        
+        importance = pd.DataFrame({
+            'feature': feature_names,
+            'importance': feature_importances
+        }).sort_values('importance', ascending=False)
+        sns.barplot(x='importance', y='feature', data=importance)
+        
+        # 軸ラベルとタイトル
+        plt.xlabel('Importance')
+        plt.ylabel('Features')
+        plt.title(title)
+        
+    else:
+        raise ValueError('type must be "coef" or "feature_importances"')
     
     plt.tight_layout()
     plt.show()
