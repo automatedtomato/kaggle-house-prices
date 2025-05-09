@@ -112,3 +112,47 @@ def plot_feature_importance(model, feature_names, title="Importance of Features"
     plt.show()
     
     return importance
+
+
+def plot_learning_curve(estimator, X, y, title="Learning Curve"):
+    from sklearn.model_selection import learning_curve
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    
+    # 学習曲線の計算
+    train_sizes, train_scores, val_scores = learning_curve(
+        estimator, X, y,
+        train_sizes=np.linspace(0.1, 1.0, 10),
+        cv=5,
+        scoring='neg_mean_squared_error',
+        n_jobs=-1
+    )
+    
+    train_mean = -train_scores.mean(axis=1)
+    train_std = train_scores.std(axis=1)
+    val_mean = -val_scores.mean(axis=1)
+    val_std = val_scores.std(axis=1)
+    
+    
+    # プロット作成
+    plt.plot(train_sizes, train_mean, 
+                marker='o', label='Training')
+    plt.plot(train_sizes, val_mean, ls='--',
+                marker='o', label='Validation')
+    
+    # 信頼区間の追加
+    plt.fill_between(train_sizes, 
+                     train_mean - train_std,
+                     train_mean + train_std, 
+                     alpha=0.1)
+    plt.fill_between(train_sizes,
+                     val_mean - val_std,
+                     val_mean + val_std,
+                     alpha=0.1)
+    
+    # グラフの装飾
+    plt.title(title)
+    plt.xlabel('Training Examples')
+    plt.ylabel('Mean Squared Error')
+    plt.legend()
+    plt.tight_layout()
