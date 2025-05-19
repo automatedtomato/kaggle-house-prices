@@ -1,0 +1,4 @@
+,model,params,RMSE,R2
+0,Ridge (base),alpha=10.0,0.1443,0.8821
+0,RFR,"{'n_estimators': 144, 'max_depth': 27, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': 22}",0.1414,0.8765
+0,XGB Regr.,"{'learning_rate': 0.06258673844191955, 'max_depth': 30, 'min_child_weight': 6, 'subsample': 0.575309470827, 'colsample_bytree': 0.7570165472459157, 'gamma': 0.2323178887112457, 'reg_alpha': 0.6, 'reg_lambda': 3}",0.13665231620908566,0.8912431595472241

@@ -127,9 +127,8 @@ def plot_feature_importance(model, feature_names, type='coef', title="Importance
         raise ValueError('type must be "coef" or "feature_importances"')
     
     plt.tight_layout()
-    plt.show()
     
-    return importance
+    return importance.reset_index(drop=True)
 
 
 def plot_learning_curve(estimator, X, y, title="Learning Curve"):
@@ -145,9 +144,9 @@ def plot_learning_curve(estimator, X, y, title="Learning Curve"):
         n_jobs=-1
     )
     
-    train_mean = -train_scores.mean(axis=1)
+    train_mean = train_scores.mean(axis=1)
     train_std = train_scores.std(axis=1)
-    val_mean = -val_scores.mean(axis=1)
+    val_mean = val_scores.mean(axis=1)
     val_std = val_scores.std(axis=1)
     
     
@@ -170,6 +169,6 @@ def plot_learning_curve(estimator, X, y, title="Learning Curve"):
     # グラフの装飾
     plt.title(title)
     plt.xlabel('Training Examples')
-    plt.ylabel('Mean Squared Error')
+    plt.ylabel('Neg Mean Squared Error')
     plt.legend()
     plt.tight_layout()
